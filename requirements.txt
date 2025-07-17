@@ -1,0 +1,18 @@
+fastapi
+joblib
+numpy
+scikit-learn==1.6.1
+openpyxl
+gunicorn
+uvicorn[standard]
+sqlalchemy>=1.4  # Ensure async support
+psycopg2-binary
+pydantic>=2.0
+pydantic-settings>=2.0.0  # Required for BaseSettings in Pydantic v2
+asyncpg
+databases
+pandas
+tensorflow==2.17.0
+python-multipart
+openpyxl
+fpdf

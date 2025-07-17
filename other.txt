@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mobile Money Transaction</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: #0d0b1f;
+    }
+    .glow-box {
+      box-shadow: 0 0 20px rgba(236, 72, 153, 0.8);
+      border-radius: 1rem;
+    }
+    .gradient-button {
+      background: linear-gradient(to right, #ec4899, #38bdf8);
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex flex-col text-white">
+
+<!-- Navbar -->
+<header class="p-4 text-sm flex gap-4">
+  <a href="#" class="text-pink-500 hover:underline">Dashboard</a>
+  <a href="#" class="text-gray-500 hover:text-pink-400">Feedback</a>
+  <a href="#" class="text-blue-500 hover:underline">Upload</a>
+</header>
+
+<!-- Main Content -->
+<main class="flex-1 flex items-center justify-center p-4">
+  <div class="w-full max-w-3xl p-6 glow-box bg-[#1c1a32] relative">
+
+    <!-- Form -->
+    <h2 class="text-2xl font-bold mb-6 text-white text-center">Transaction Form</h2>
+
+    <form id="transactionForm"  method="post" class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+
+      <div>
+        <label class="block mb-1 text-gray-300">Beneficiary Number</label>
+        <input type="text" id="beneficiaryphoneno" name="namedest" placeholder="e.g., 0244474327"
+          class="w-full p-2 rounded-md bg-transparent border border-gray-600 focus:outline-none focus:ring-2 focus:ring-pink-400" required oninput="validateBeneficiaryPhone()">
+      </div>
+
+      <div>
+        <label class="block mb-1 text-gray-300">Payment Type</label>
+        <select name="type"
+          class="w-full p-2 rounded-md bg-transparent border border-gray-600 focus:outline-none focus:ring-2 focus:ring-pink-400" required>
+          <option>Transfer</option>
+          <option>Payment</option>
+          <option>Cash In</option>
+          <option>Cash Out</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block mb-1 text-gray-300">Mobile Network</label>
+        <select name="mobilenetwork"
+          class="w-full p-2 rounded-md bg-transparent border border-gray-600 focus:outline-none focus:ring-2 focus:ring-pink-400" required>
+          <option>MTN</option>
+          <option>Vodafone</option>
+          <option>AirtelTigo</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block mb-1 text-gray-300">Full Name (Beneficiary)</label>
+        <input type="text" id="beneficiaryname" name="beneficiaryname" placeholder="e.g., Frank Sarfo"
+          class="w-full p-2 rounded-md bg-transparent border border-gray-600 focus:outline-none focus:ring-2 focus:ring-pink-400" readonly>
+      </div>
+
+      <div>
+        <label class="block mb-1 text-gray-300">Transaction Amount (GHS)</label>
+        <input type="number" name="amount" step="0.01" placeholder="e.g., 150.00"
+          class="w-full p-2 rounded-md bg-transparent border border-gray-600 focus:outline-none focus:ring-2 focus:ring-pink-400" required>
+      </div>
+
+      <div>
+        <label class="block mb-1 text-gray-300">Initiator Phone Number</label>
+        <input type="text" id="initiatorphoneno" name="initiatorphone" placeholder="e.g., 0241234567"
+          class="w-full p-2 rounded-md bg-transparent border border-gray-600 focus:outline-none focus:ring-2 focus:ring-pink-400" required oninput="fetchInitiatorBalance()">
+      </div>
+
+      <!-- Hidden Fields -->
+      <input type="hidden" name="oldbalanceorg" id="oldbalanceorg">
+      <input type="hidden" name="newbalanceorig" id="newbalanceorig">
+      <input type="hidden" name="oldbalancedest" id="oldbalancedest">
+      <input type="hidden" name="newbalancedest" id="newbalancedest">
+
+      <!-- Step Input -->
+      <div>
+        <label class="block mb-1 text-gray-300">Step</label>
+        <input type="number" name="step" min="1" placeholder="e.g., 1"
+          class="w-full p-2 rounded-md bg-transparent border border-gray-600 focus:outline-none focus:ring-2 focus:ring-pink-400" required>
+      </div>
+
+      <!-- Balance Display -->
+      <div class="flex items-center">
+        <span id="balanceAmount" class="text-xs text-cyan-400 font-semibold">Balance: GHS 0.00</span>
+      </div>
+
+    </form>
+
+    <!-- Submit Button -->
+    <div class="mt-6">
+      <button type="submit" form="transactionForm"
+        class="w-full py-3 rounded-md text-black font-bold gradient-button hover:opacity-90">
+        Submit Transaction
+      </button>
+    </div>
+
+
+  </div>
+</main>
+
+<!-- JavaScript Section -->
+<script>
+  // Fetch Initiator Balance
+  async function fetchInitiatorBalance() {
+    const phoneNumber = document.getElementById('initiatorphoneno').value.trim();
+    const balanceDisplay = document.getElementById('balanceAmount');
+
+    if (!phoneNumber) {
+      balanceDisplay.innerText = 'Balance: GHS 0.00';
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/validate-initiator/${phoneNumber}`);
+      const data = await response.json();
+
+      if (data.success) {
+        const balance = parseFloat(data.balance).toFixed(2);
+        balanceDisplay.innerText = `Balance: GHS ${balance}`;
+        document.getElementById('oldbalanceorg').value = balance;
+        document.getElementById('newbalanceorig').value = balance;
+      } else {
+        balanceDisplay.innerText = 'Balance: GHS 0.00';
+        alert('Initiator not found.');
+      }
+    } catch (error) {
+      console.error(error);
+      alert('Server error fetching balance.');
+    }
+  }
+
+  // Validate Beneficiary
+  async function validateBeneficiaryPhone() {
+    const phone = document.getElementById('beneficiaryphoneno').value.trim();
+    const nameField = document.getElementById('beneficiaryname');
+
+    if (!phone) {
+      nameField.value = '';
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/validate-beneficiary/${phone}`);
+      const data = await response.json();
+
+      if (data.success) {
+        nameField.value = data.full_name;
+      } else {
+        nameField.value = 'Account Not Found';
+      }
+    } catch (err) {
+      console.error(err);
+      nameField.value = 'Error Fetching';
+    }
+  }
+
+  // Submit Transaction
+  // Submit Transaction
+async function submitTransaction(event) {
+  event.preventDefault();
+  const form = event.target;
+
+  const amount = parseFloat(form.amount.value);
+  const oldbalanceOrg = parseFloat(form.oldbalanceorg.value) || 0;
+  const oldbalanceDest = parseFloat(form.oldbalancedest.value) || 0;
+  const newbalanceOrig = oldbalanceOrg - amount;
+  const newbalanceDest = oldbalanceDest + amount;
+
+  document.getElementById('newbalanceorig').value = newbalanceOrig;
+  document.getElementById('newbalancedest').value = newbalanceDest;
+
+  const transactionData = {
+    trxdate: new Date().toISOString(),
+    step: parseInt(form.step.value),
+    type: form.type.value,
+    amount: amount,
+    nameOrig: form.initiatorphone.value,
+    oldbalanceOrg: oldbalanceOrg,
+    newbalanceOrig: newbalanceOrig,
+    nameDest: form.namedest.value,
+    beneficiaryname: form.beneficiaryname.value,
+    oldbalanceDest: oldbalanceDest,
+    newbalanceDest: newbalanceDest,
+    mobilenetwork: form.mobilenetwork.value
+  };
+
+  console.log("Payload being sent to FastAPI:", transactionData);
+
+  try {
+    const [submitRes, predictRes] = await Promise.all([
+      fetch('http://127.0.0.1:8000/transactions/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(transactionData)
+      }),
+      fetch("http://127.0.0.1:8000/predict", {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(transactionData)
+      })
+    ]);
+
+    if (!submitRes.ok || !predictRes.ok) {
+      alert('Transaction or prediction failed.');
+      return;
+    }
+
+    const submitData = await submitRes.json();
+    const predictData = await predictRes.json();
+
+    console.log("Prediction result:", predictData);
+
+    document.getElementById('balanceAmount').innerText = `Balance: GHS ${submitData.newbalanceorig.toFixed(2)}`;
+    alert('Transaction submitted and prediction successful!');
+  } catch (err) {
+    console.error('Error:', err);
+    alert('Submission failed.');
+  }
+}
+
+  document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('transactionForm');
+  form.addEventListener('submit', submitTransaction);
+});
+
+</script>
+
+</body>
+</html>

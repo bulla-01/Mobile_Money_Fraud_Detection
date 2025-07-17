@@ -1,0 +1,331 @@
+GET /top_high_risk_users/?start_date=2025-01-01&end_date=2025-03-31 HTTP/1.1"
+http://localhost:8000/top_high_risk_users/?start_date=2025-01-01&end_date=2025-03-31
+
+
+API URL FOR 
+http://127.0.0.1:8000/docs
+
+Bentjun25$
+ALTER USER postgres PASSWORD 'Bentjun25$';
+CREATE DATABASE MOMO_DB;
+psql -U postgres -d momo_db
+\dt
+ALTER TABLE transactiontbl ADD COLUMN beneficiaryname VARCHAR;
+
+DROP TABLE transactiontbl; To delete table
+nameOrig TEXT CHECK (nameOrig ~ '^\d+$'), -- Only numeric values
+CREATE TABLE feedback (
+    id SERIAL PRIMARY KEY,
+    step INTEGER,
+    type VARCHAR,
+    amount FLOAT,
+    nameOrig VARCHAR,
+    oldbalanceOrg FLOAT,
+    newbalanceOrig FLOAT,
+    nameDest VARCHAR,
+    oldbalanceDest FLOAT,
+    newbalanceDest FLOAT,
+    isFraud INTEGER
+);
+SELECT 
+    column_name, 
+    data_type, 
+    character_maximum_length,
+    numeric_precision,
+    numeric_scale,
+    is_nullable
+FROM 
+    information_schema.columns
+WHERE 
+    table_schema = 'public'  -- or your specific schema
+    AND table_name = 'your_table_name';
+
+INSERT INTO transactiontb (
+    trxdate, type, amount, nameorig, oldbalanceorg, newbalanceorig,
+    namedest, beneficiaryname, oldbalancedest, newbalancedest, mobilenetwork
+) VALUES 
+    (NOW(), 'Transfer', 19824.96, '0244000001', 187712.18, 167887.22, 'DestUser001', 'Frank Sarfo', 8.31, 19833.27, 'MTN'),
+    (NOW(), 'Payment', 16973.75, '0244000002', 158601.88, 141628.12, 'DestUser002', 'Ama Mensah', 54.33, 19833.27, 'Vodafone'),
+    (NOW(), 'Cash In', 200.00, '0244000003', 100.00, 300.00, 'DestUser003', 'Kwame Bediako', 400.00, 600.00, 'AirtelTigo'),
+    (NOW(), 'Cash Out', 75.00, '0244000004', 250.00, 175.00, 'DestUser004', 'Esi Akosua', 150.00, 225.00, 'MTN'),
+    (NOW(), 'Transfer', 120.00, '0244000005', 800.00, 680.00, 'DestUser005', 'Yaw Osei', 500.00, 620.00, 'Vodafone'),
+    (NOW(), 'Payment', 30.00, '0244000006', 300.00, 270.00, 'DestUser006', 'Akua Dapaah', 100.00, 130.00, 'AirtelTigo'),
+    (NOW(), 'Cash In', 500.00, '0244000007', 1000.00, 1500.00, 'DestUser007', 'Kofi Owusu', 700.00, 1200.00, 'MTN'),
+    (NOW(), 'Cash Out', 20.00, '0244000008', 150.00, 130.00, 'DestUser008', 'Abena Boateng', 80.00, 100.00, 'Vodafone'),
+    (NOW(), 'Transfer', 90.00, '0244000009', 450.00, 360.00, 'DestUser009', 'Kojo Antwi', 300.00, 390.00, 'AirtelTigo'),
+    (NOW(), 'Payment', 10.00, '0244000010', 50.00, 40.00, 'DestUser010', 'Efua Mensimah', 30.00, 40.00, 'MTN');
+0	TRANSFER	16973.75	4.77901E+15	158601.88	141628.12	4.59325E+15	54.33	17028.08	1
+
+0	TRANSFER	19824.96	4.53703E+15	187712.18	167887.22	4.8757E+15	8.31	19833.27	1
+0	PAYMENT	598.97	4.29627E+15	8.92	8.92	25-0000401	0	0	0
+0	PAYMENT	545.85	4.17822E+15	93.6	-452.25	13-0001587	0	545.85	0
+0	TRANSFER	19847.01	4.17822E+15	-452.25	-20299.26	4.09692E+15	4011.72	23858.74	1
+0	PAYMENT	546.89	4.77901E+15	159148.76	158601.88	75-0003564	0	546.89	0
+0	TRANSFER	16973.75	4.77901E+15	158601.88	141628.12	4.59325E+15	54.33	17028.08	1
+0	PAYMENT	659.02	4.47945E+15	261950.48	261291.46	11-0003866	0	659.02	0
+0	TRANSFER	21103.99	4.47945E+15	261291.46	240187.47	4.64955E+15	19.63	21123.63	1
+0	PAYMENT	648.89	4.58794E+15	4808.94	4160.05	64-0008405	0	648.89	0
+0	TRANSFER	16908.07	4.58794E+15	4160.05	4160.05	4.86317E+15	66.12	66.12	1
+0	PAYMENT	586.53	4.97887E+15	78413.4	77826.87	48-0008930	0	586.53	0
+0	TRANSFER	23715.64	4.97887E+15	77826.87	54111.24	4.82294E+15	14691.67	38407.31
+INSERT INTO regtb (
+    phoneno, full_name, dob, email, house_address, id_no, tin, next_of_kin, next_contact, pin
+) VALUES
+('0244000001', 'Frank Sarfo', '1995-06-01', 'frank.sarfo@example.com', '123 Main St', 'GHA123456', 'TIN001', 'Esi Sarfo', '0244001111', '1234'),
+('0244000002', 'Ama Mensah', '1992-08-15', 'ama.mensah@example.com', '456 Accra Rd', 'GHA234567', 'TIN002', 'Kojo Mensah', '0244002222', '5678'),
+('0244000003', 'Kwame Bediako', '1988-03-20', 'kwame.bediako@example.com', '789 Kumasi Ave', 'GHA345678', 'TIN003', 'Akua Bediako', '0244003333', '4321'),
+('0244000004', 'Esi Akosua', '1990-11-10', 'esi.akosua@example.com', '12 Cape Coast Ln', 'GHA456789', 'TIN004', 'Yaw Akosua', '0244004444', '8765'),
+('0244000005', 'Yaw Osei', '1997-05-25', 'yaw.osei@example.com', '55 Tema Comm 1', 'GHA567890', 'TIN005', 'Ama Osei', '0244005555', '3456'),
+('0244000006', 'Akua Dapaah', '1993-09-14', 'akua.dapaah@example.com', '99 Takoradi Blvd', 'GHA678901', 'TIN006', 'Kwame Dapaah', '0244006666', '7890'),
+('0244000007', 'Kofi Owusu', '1991-12-05', 'kofi.owusu@example.com', '11 Tamale St', 'GHA789012', 'TIN007', 'Afia Owusu', '0244007777', '2109'),
+('0244000008', 'Abena Boateng', '1989-04-30', 'abena.boateng@example.com', '77 Sunyani Rd', 'GHA890123', 'TIN008', 'Yaw Boateng', '0244008888', '6543'),
+('0244000009', 'Kojo Antwi', '1996-02-18', 'kojo.antwi@example.com', '33 Hohoe Dr', 'GHA901234', 'TIN009', 'Ama Antwi', '0244009999', '3210'),
+('0244000010', 'Efua Mensimah', '1994-07-12', 'efua.mensimah@example.com', '66 Koforidua Ave', 'GHA012345', 'TIN010', 'Kwame Mensimah', '0244010000', '9876');
+________________________________________________________________________________________________________________________
+
+CREATE TABLE transaction_analysis (
+    id SERIAL PRIMARY KEY,
+    trxdate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    type VARCHAR(20),
+    nameOrig VARCHAR(50),
+    nameDest VARCHAR(50),
+    beneficiaryname VARCHAR(100),
+    amount NUMERIC(15, 2),
+    mobilenetwork VARCHAR(30),
+    latitude DOUBLE PRECISION,
+    longtitude DOUBLE PRECISION,
+    is_fraud VARCHAR(10),
+    risk_score NUMERIC(4, 2),
+    reason TEXT
+);
+
+
+
+
+
+Running Application from a server
+cd C:/My_Projects/Fraud_Detection_System/FRONT%20END/
+python -m http.server
+
+
+TRUNCATE TABLE feedback;
+\dt              #list of tables
+\d transactiontb  #check table details
+
+from sqlalchemy import create_engine
+
+# Example connection string
+engine = create_engine("postgresql+psycopg2://username:password@localhost:5432/database_name")
+
+
+_________________________________________________________________________________________________
+uvicorn app:app --reload
+
+__________________________________________
+✅ Step-by-Step: Get an SMTP-Compatible App Password for Gmail
+1. Enable 2-Step Verification
+You must first enable 2-Step Verification on your Gmail account:
+
+Go to Google Account Settings
+
+Navigate to Security
+
+Under "Signing in to Google", enable 2-Step Verification
+
+2. Generate an App Password
+Once 2-Step Verification is enabled:
+
+Visit: https://myaccount.google.com/apppasswords
+
+You may need to log in again
+
+Select:
+
+App: "Mail"
+
+Device: Choose your device or name it something like "Python Script"
+
+Click Generate
+
+Google will give you a 16-character password (e.g., abcd efgh ijkl mnop)
+
+Copy this password — you’ll use it instead of your Gmail password in your script
+
+
+
+SMTP Pass :mhte hnhy lovn lplj
+
+https://www.google.com/search?q=the+use+of+IT+in+daily+lige+activities+in+health+sector+and+transportation+videos&sca_esv=f37af7071d948b3e&udm=7&biw=1280&bih=559&sxsrf=AHTn8zrFU_VEhGCaAS2HHVxsL35e8zrr_Q%3A1747893624540&ei=eL0uaOjeIIaui-gPgOCOqA4&ved=0ahUKEwjo-uGUs7aNAxUG1wIHHQCwA-UQ4dUDCBA&uact=5&oq=the+use+of+IT+in+daily+lige+activities+in+health+sector+and+transportation+videos&gs_lp=EhZnd3Mtd2l6LW1vZGVsZXNzLXZpZGVvIlF0aGUgdXNlIG9mIElUIGluIGRhaWx5IGxpZ2UgYWN0aXZpdGllcyBpbiBoZWFsdGggc2VjdG9yIGFuZCB0cmFuc3BvcnRhdGlvbiB2aWRlb3NI3rYCUABYia4CcAN4AJABAJgBuQGgAcUsqgEENzIuMbgBA8gBAPgBAZgCPaACxiXCAgYQABgHGB7CAggQABgHGAgYHsICCBAAGAUYBxgewgIGEAAYCBgewgILEAAYgAQYhgMYigXCAggQABiABBiiBMICBRAAGIAEwgIEEAAYHsICCBAhGKABGMMEwgIKECEYoAEYwwQYCsICBRAAGO8FwgIEECEYCpgDAJIHBDU5LjKgB_G4ArIHBDU2LjK4B7wl&sclient=gws-wiz-modeless-video#fpstate=ive&vld=cid:02ec565c,vid:V97gg-WWBSg,st:0
+
+
+
+
+🔹 1. AI / Machine Learning Engineer
+✅ Google Advanced Data Analytics Certificate (Coursera)
+Provider: Google via Coursera
+
+Covers: Python, ML models, classification/regression, TensorFlow, model validation
+
+Level: Intermediate – Advanced
+
+Good for: Aspiring ML Engineers and Data Scientists
+
+✅ Deep Learning Specialization (Coursera)
+Instructor: Andrew Ng, DeepLearning.AI
+
+Covers: Neural networks, CNNs, RNNs, sequence models
+
+Tools: TensorFlow, Python
+
+Highly respected in the industry
+
+🔹 2. Cybersecurity Analyst / Engineer
+✅ Google Cybersecurity Certificate (Coursera)
+Beginner-friendly, job-ready training
+
+Covers: Risk assessment, network security, incident response, SIEM tools
+
+✅ CompTIA Security+ (SY0-601)
+Globally recognized vendor-neutral certification
+
+Covers: Network security, cryptography, threats, access control
+
+Good starting point for analyst/engineer roles
+
+✅ Certified Ethical Hacker (CEH)
+Advanced, focuses on penetration testing and hacking tools
+
+Provider: EC-Council
+
+Great for Red Team/Blue Team roles
+
+🔹 3. Cloud Architect / Cloud Engineer
+✅ AWS Certified Solutions Architect – Associate
+Most popular cloud architect cert
+
+Covers: AWS compute, storage, networking, and security
+
+Ideal for cloud solution roles
+
+✅ Google Cloud Professional Cloud Architect
+Best for Google Cloud-focused careers
+
+Covers: GCP design, workload management, cloud solutions
+
+✅ Microsoft Certified: Azure Solutions Architect Expert
+Good for hybrid or enterprise cloud environments
+
+Covers: Identity, compute, data, networking, and governance
+
+🔹 4. Data Scientist / Data Engineer
+✅ IBM Data Science Professional Certificate (Coursera)
+Great starting point for data science
+
+Includes: Python, SQL, data analysis, machine learning, data visualization
+
+✅ Google Cloud Professional Data Engineer
+Advanced certification for big data processing and ML models
+
+Focus: Cloud-native data pipelines, BigQuery, and stream processing
+
+✅ Data Engineering with Google Cloud (Coursera)
+Covers: ETL, pipeline automation, GCP tools
+
+Good prep for the Google Data Engineer exam
+
+🔹 5. DevOps Engineer / Site Reliability Engineer (SRE)
+✅ DevOps on AWS Specialization (Coursera)
+Covers: CI/CD, monitoring, IaC (Terraform, CloudFormation), Docker, Kubernetes
+
+✅ Google Cloud Professional DevOps Engineer
+Focus: GCP, monitoring, deployment pipelines, SRE principles
+
+✅ Certified Kubernetes Administrator (CKA)
+Essential for SREs or cloud-native DevOps
+
+Covers: Kubernetes setup, management, and networking
+
+✅ HashiCorp Terraform Associate
+IaC-focused certification
+
+Useful for modern DevOps pipelines and automation
+
+grep -rnw . -e 'save_prediction_to_db'
+
+
+##################################################################################################
+import random
+import json
+from datetime import datetime, timedelta
+
+# Function to generate a random datetime within the current year
+def random_datetime_this_year():
+    start = datetime(datetime.now().year, 1, 1)
+    end = datetime(datetime.now().year, 12, 31, 23, 59, 59)
+    return start + (end - start) * random.random()
+
+# Configuration for sample values
+transaction_types = ['TRANSFER', 'CASH_OUT', 'PAYMENT', 'DEBIT']
+mobile_networks = ['MTN', 'Vodafone', 'AirtelTigo']
+prediction_descriptions = ['Low Risk', 'Medium Risk', 'High Risk - Fraud Likely']
+prediction_labels = ['NOT_FRAUD', 'FRAUD']
+reasons = [
+    'Unusual transaction pattern',
+    'High frequency of transactions',
+    'Large amount transferred to new beneficiary',
+    'Known fraudulent recipient',
+    'Geolocation mismatch'
+]
+
+# Generate 500 insert values
+rows = []
+for _ in range(500):
+    step = random.randint(1, 100)
+    trx_type = random.choice(transaction_types)
+    amount = round(random.uniform(10.0, 100000.0), 2)
+    nameorig = f"C{random.randint(100000000, 999999999)}"
+    oldbalanceorg = round(random.uniform(0.0, 200000.0), 2)
+    newbalanceorg = oldbalanceorg - amount if oldbalanceorg >= amount else 0.0
+    namedest = f"C{random.randint(100000000, 999999999)}"
+    oldbalancedest = round(random.uniform(0.0, 150000.0), 2)
+    newbalancedest = oldbalancedest + amount
+    trxdate = random_datetime_this_year().strftime('%Y-%m-%d %H:%M:%S')
+    beneficiaryname = f"User{random.randint(1, 1000)}"
+    mobilenetwork = random.choice(mobile_networks)
+    prediction_description = random.choice(prediction_descriptions)
+    prediction_response = json.dumps({"model": "XGBoost", "score": round(random.uniform(0.0, 1.0), 3)})
+    is_fraud = random.choice([True, False])
+    fraud_probability = round(random.uniform(0.0, 1.0), 3)
+    prediction_label = 'FRAUD' if is_fraud else 'NOT_FRAUD'
+    risk_score = round(random.uniform(0.0, 100.0), 2)
+    reason = random.choice(reasons)
+    latitude = round(random.uniform(4.5, 11.0), 4)  # Ghana latitude
+    longitude = round(random.uniform(-3.0, 1.5), 4)  # Ghana longitude
+
+    row = f"""(
+        {step}, '{trx_type}', {amount}, '{nameorig}', {oldbalanceorg}, {newbalanceorg},
+        '{namedest}', {oldbalancedest}, {newbalancedest}, '{trxdate}',
+        '{beneficiaryname}', '{mobilenetwork}', '{prediction_description}', DEFAULT,
+        '{prediction_response}', {str(is_fraud).lower()}, {fraud_probability}, '{prediction_label}',
+        {risk_score}, '{reason}', {latitude}, {longitude}
+    )"""
+    rows.append(row)
+
+# Compose the full SQL insert
+sql_statement = (
+    "INSERT INTO prediction_analysis (\n"
+    "step, type, amount, nameorig, oldbalanceorg, newbalanceorig, \n"
+    "namedest, oldbalancedest, newbalancedest, trxdate, \n"
+    "beneficiaryname, mobilenetwork, prediction_description, prediction_date, \n"
+    "prediction_response, is_fraud, fraud_probability, prediction_label, \n"
+    "risk_score, reason, latitude, longitude\n"
+    ")\nVALUES\n" + ",\n".join(rows) + ";\n"
+)
+
+# Write to file
+with open("insert_prediction_analysis.sql", "w") as file:
+    file.write(sql_statement)
+
+print("SQL insert script saved to 'insert_prediction_analysis.sql'")
+
+#########################CHECKING FOR RECORD IN TABLE ##################
