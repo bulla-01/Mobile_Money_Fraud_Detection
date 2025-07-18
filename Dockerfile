@@ -1,6 +1,6 @@
 # Dockerfile
 
-FROM --platform=linux/amd64 python:3.10.13
+FROM python:3.9
 
 WORKDIR /app
 
