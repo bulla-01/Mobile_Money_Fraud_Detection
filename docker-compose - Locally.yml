@@ -6,7 +6,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-    DATABASE_URL: "postgresql://admin:XrlWGG7A4yNPK0A0U5vO2fxcRzCqeYhl@dpg-d1t7hgk9c44c73d7bqng-a.oregon-postgres.render.com/momo_db_0t45"
+      DATABASE_URL: "postgresql://postgres:Bentjun25$@db:5432/momo_db"
     depends_on:
       - db
     restart: unless-stopped

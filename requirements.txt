@@ -5,14 +5,13 @@ scikit-learn==1.6.1
 openpyxl
 gunicorn
 uvicorn[standard]
-sqlalchemy>=1.4  # Ensure async support
+sqlalchemy>=1.4
 psycopg2-binary
 pydantic>=2.0
-pydantic-settings>=2.0.0  # Required for BaseSettings in Pydantic v2
+pydantic-settings>=2.0.0
 asyncpg
 databases
 pandas
-tensorflow==2.17.0
+tensorflow==2.15.0 
 python-multipart
-openpyxl
 fpdf
