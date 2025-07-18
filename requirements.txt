@@ -12,6 +12,5 @@ pydantic-settings>=2.0.0
 asyncpg
 databases
 pandas
-tensorflow==2.15.0
 python-multipart
 fpdf
