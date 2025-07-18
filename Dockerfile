@@ -1,4 +1,4 @@
-FROM python:3.10-slim-buster
+FROM python:3.10-bullseye
 
 WORKDIR /app
 
@@ -9,6 +9,10 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     curl \
     git \
+    libatlas-base-dev \
+    libopenblas-dev \
+    liblapack-dev \
+    gfortran \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
