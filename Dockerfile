@@ -1,23 +1,25 @@
-# Dockerfile
-
-FROM python:3.9
+FROM python:3.10-slim-buster
 
 WORKDIR /app
 
-# Optionally install system dependencies
-# RUN apt-get update && apt-get install -y build-essential
+# Install required system dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    python3-dev \
+    libpq-dev \
+    curl \
+    git \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
 
+RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
-
-COPY .env .env
 
 RUN chmod +x /app/wait-for-it.sh
 
 EXPOSE 8000
 
 CMD ["/app/wait-for-it.sh", "db:5432", "--", "uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
-
