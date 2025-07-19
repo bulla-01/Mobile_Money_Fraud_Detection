@@ -1,17 +1,13 @@
+# database.py
+
 import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import SQLAlchemyError
-from dotenv import load_dotenv
-from models import Base
 
-# Load environment variables from .env
-load_dotenv()
+from models import Base  # ✅ ok to import here
 
-# Fetch from environment only (with ?sslmode=require already included)
-DATABASE_URL = os.getenv("DATABASE_URL")
-if not DATABASE_URL:
-    raise ValueError("DATABASE_URL not set in environment.")
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://myuser:mypassword@db:5432/momo_db")
 
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

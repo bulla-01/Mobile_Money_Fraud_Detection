@@ -1,0 +1,573 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 17.5 (Debian 17.5-1.pgdg120+1)
+-- Dumped by pg_dump version 17.5 (Debian 17.5-1.pgdg120+1)
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET transaction_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: compliance_tbl; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.compliance_tbl (
+    id integer NOT NULL,
+    user_id character varying,
+    transaction_id character varying,
+    reason character varying,
+    is_fraudulent boolean,
+    created_at timestamp without time zone
+);
+
+
+ALTER TABLE public.compliance_tbl OWNER TO postgres;
+
+--
+-- Name: compliance_tbl_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.compliance_tbl_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.compliance_tbl_id_seq OWNER TO postgres;
+
+--
+-- Name: compliance_tbl_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.compliance_tbl_id_seq OWNED BY public.compliance_tbl.id;
+
+
+--
+-- Name: compliancetbl; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.compliancetbl (
+    user_id character varying(50) NOT NULL,
+    full_name character varying(255) NOT NULL,
+    email character varying(100) NOT NULL,
+    status character varying(10),
+    department character varying(100),
+    created_by character varying(100),
+    date_created timestamp without time zone DEFAULT CURRENT_TIMESTAMP
+);
+
+
+ALTER TABLE public.compliancetbl OWNER TO postgres;
+
+--
+-- Name: feedback; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.feedback (
+    id integer NOT NULL,
+    step integer,
+    type character varying,
+    amount double precision,
+    "nameOrig" character varying,
+    "oldbalanceOrg" double precision,
+    "newbalanceOrig" double precision,
+    "nameDest" character varying,
+    "oldbalanceDest" double precision,
+    "newbalanceDest" double precision,
+    "isFraud" integer
+);
+
+
+ALTER TABLE public.feedback OWNER TO postgres;
+
+--
+-- Name: feedback_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.feedback_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.feedback_id_seq OWNER TO postgres;
+
+--
+-- Name: feedback_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.feedback_id_seq OWNED BY public.feedback.id;
+
+
+--
+-- Name: prediction_analysis; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.prediction_analysis (
+    id integer NOT NULL,
+    step integer,
+    type character varying(50),
+    amount double precision,
+    nameorig character varying(100),
+    oldbalanceorg double precision,
+    newbalanceorig double precision,
+    namedest character varying(100),
+    oldbalancedest double precision,
+    newbalancedest double precision,
+    trxdate timestamp without time zone,
+    beneficiaryname character varying(100),
+    mobilenetwork character varying(50),
+    is_fraud boolean,
+    fraud_probability double precision,
+    prediction_label character varying(255),
+    prediction_description character varying(50),
+    prediction_date timestamp without time zone,
+    latitude double precision,
+    longitude double precision
+);
+
+
+ALTER TABLE public.prediction_analysis OWNER TO postgres;
+
+--
+-- Name: prediction_analysis_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.prediction_analysis_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.prediction_analysis_id_seq OWNER TO postgres;
+
+--
+-- Name: prediction_analysis_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.prediction_analysis_id_seq OWNED BY public.prediction_analysis.id;
+
+
+--
+-- Name: regtbl; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.regtbl (
+    phone_number character varying NOT NULL,
+    fullname character varying,
+    date_of_birth date,
+    email character varying,
+    house_address character varying,
+    latitude double precision,
+    longitude double precision,
+    id_number character varying,
+    tin character varying,
+    next_of_kin character varying,
+    next_of_kin_phone character varying,
+    pin character varying(4)
+);
+
+
+ALTER TABLE public.regtbl OWNER TO postgres;
+
+--
+-- Name: risk_users; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.risk_users (
+    id integer NOT NULL,
+    namedest character varying NOT NULL,
+    fraud_probability double precision NOT NULL
+);
+
+
+ALTER TABLE public.risk_users OWNER TO postgres;
+
+--
+-- Name: risk_users_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.risk_users_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.risk_users_id_seq OWNER TO postgres;
+
+--
+-- Name: risk_users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.risk_users_id_seq OWNED BY public.risk_users.id;
+
+
+--
+-- Name: transactiontbl; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.transactiontbl (
+    id integer NOT NULL,
+    trxdate timestamp without time zone NOT NULL,
+    step integer NOT NULL,
+    type character varying(50) NOT NULL,
+    amount numeric(12,2) NOT NULL,
+    "nameOrig" character varying(255) NOT NULL,
+    "oldbalanceOrg" numeric(12,2),
+    "newbalanceOrig" numeric(12,2),
+    "nameDest" character varying(255) NOT NULL,
+    "oldbalanceDest" numeric(12,2),
+    "newbalanceDest" numeric(12,2),
+    mobilenetwork character varying(50),
+    beneficiaryname character varying(255),
+    transactionstatus character varying,
+    is_fraud character varying,
+    fraud_probability character varying,
+    prediction_label character varying,
+    prediction_description character varying,
+    prediction_date date,
+    latitude double precision,
+    longitude double precision
+);
+
+
+ALTER TABLE public.transactiontbl OWNER TO postgres;
+
+--
+-- Name: transactiontbl_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.transactiontbl_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.transactiontbl_id_seq OWNER TO postgres;
+
+--
+-- Name: transactiontbl_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.transactiontbl_id_seq OWNED BY public.transactiontbl.id;
+
+
+--
+-- Name: compliance_tbl id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.compliance_tbl ALTER COLUMN id SET DEFAULT nextval('public.compliance_tbl_id_seq'::regclass);
+
+
+--
+-- Name: feedback id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.feedback ALTER COLUMN id SET DEFAULT nextval('public.feedback_id_seq'::regclass);
+
+
+--
+-- Name: prediction_analysis id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.prediction_analysis ALTER COLUMN id SET DEFAULT nextval('public.prediction_analysis_id_seq'::regclass);
+
+
+--
+-- Name: risk_users id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.risk_users ALTER COLUMN id SET DEFAULT nextval('public.risk_users_id_seq'::regclass);
+
+
+--
+-- Name: transactiontbl id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.transactiontbl ALTER COLUMN id SET DEFAULT nextval('public.transactiontbl_id_seq'::regclass);
+
+
+--
+-- Data for Name: compliance_tbl; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.compliance_tbl (id, user_id, transaction_id, reason, is_fraudulent, created_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: compliancetbl; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.compliancetbl (user_id, full_name, email, status, department, created_by, date_created) FROM stdin;
+2	Bob Smith	bob.smith@example.com	Inactive	Compliance	admin	2025-06-02 10:15:00
+3	Carol White	carol.white@example.com	Active	Legal	supervisor	2025-06-03 11:30:00
+4	David Brown	david.brown@example.com	Active	Audit	admin	2025-06-04 12:45:00
+5	Eve Davis	eve.davis@example.com	Inactive	Compliance	supervisor	2025-06-05 14:00:00
+1	Alice Johnson	bentjun25@gmail.com	ACTIVE	Finance	admin	2025-06-01 09:00:00
+6	Ama Serwaa Mensah	ama.mensah@example.com	active	Customer Service	admin_user	2025-07-01 14:32:00
+7	Bennet Owusu Sarfo	bentjun@gmail.com	ACTIVE		System_Admin	2025-07-06 00:00:00
+11	Bennet Owusu Sarfo	bentjun11@gmail.com	ACTIVE	IT	System_Admin	2025-07-06 00:00:00
+de131695	Frank Sarfo Kojo	franccbenz92@gmail.com	ACTIVE	IT Compliance	System_Admin	2025-07-06 00:00:00
+cbd91378	Bennet Owusu Sarfo	francbenz992@gmail.com	ACTIVE	IT Compliance	System_Admin	2025-07-06 00:00:00
+e47a9b27	Bennet Owusu Sarfo f	francbenz92@gmail.com2	ACTIVE	IT	System_Admin	2025-06-30 00:00:00
+71b9e959	Linda Mensah	linda.mensah@example.com	ACTIVE	Fraud Monitoring	System_Admin	2025-07-01 00:00:00
+8c34c4a8	Bennet Owusu Sarfo	francbenz92@gmail.1com	ACTIVE	IT Compliance	System_Admin	2018-08-14 00:00:00
+b95c23ed	Paul Sarfo	sarfopaul@gmail.com	ACTIVE	Credit Officer	System_Admin	2025-07-07 00:00:00
+f3b92e73	Daniel Oppong	oppongd@gmail.com	ACTIVE	Sales	System_Admin	2025-07-07 00:00:00
+7b248be5	Mary Agyeiwaa	agyeiwaamary@fmail.com	ACTIVE	IT Compliance	System_Admin	2025-07-01 00:00:00
+de49a63e	Thomas Eshun	AshunT@gmaill.com	ACTIVE	Sales	System_Admin	2025-07-08 00:00:00
+67e7f433	Gyemfua Mary	GyemfuaM@gmail.com	ACTIVE	Auditor	System_Admin	2025-07-08 00:00:00
+b032e576	Bennet Owusu Sarfo	francbenz92@gmail2.com	ACTIVE	IT Compliance	System_Admin	2025-07-08 00:00:00
+\.
+
+
+--
+-- Data for Name: feedback; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.feedback (id, step, type, amount, "nameOrig", "oldbalanceOrg", "newbalanceOrig", "nameDest", "oldbalanceDest", "newbalanceDest", "isFraud") FROM stdin;
+\.
+
+
+--
+-- Data for Name: prediction_analysis; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.prediction_analysis (id, step, type, amount, nameorig, oldbalanceorg, newbalanceorig, namedest, oldbalancedest, newbalancedest, trxdate, beneficiaryname, mobilenetwork, is_fraud, fraud_probability, prediction_label, prediction_description, prediction_date, latitude, longitude) FROM stdin;
+1	1	TRANSFER	450.75	C1234567890	1200	749.25	M0987654321	300	750.75	2025-06-23 10:02:01.749026	Kwame Asante	MTN	f	0.0863	ML model prediction	Legitimate	2025-06-23 10:02:01.749026	\N	\N
+2	1	TRANSFER	50	0501122334	700	650	0506677889	0	50	2025-06-23 10:22:40.279399	Kojo Asante	MTN	f	0.1531	ML model prediction	Legitimate	2025-06-23 10:22:40.279399	\N	\N
+3	1	TRANSFER	88	0541239876	450	362	0547891230	0	88	2025-06-23 12:12:29.656816	Efua Mensah	MTN	f	0.1324	ML model prediction	Legitimate	2025-06-23 12:12:29.656816	\N	\N
+\.
+
+
+--
+-- Data for Name: regtbl; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.regtbl (phone_number, fullname, date_of_birth, email, house_address, latitude, longitude, id_number, tin, next_of_kin, next_of_kin_phone, pin) FROM stdin;
+0241234567	Kwame Nkrumah	1960-03-06	kwame@example.com	Accra, Ghana	5.6037	-0.187	GHA123456	TIN12345	Ama Nkrumah	0208765432	1234
+0547891230	Efua Mensah	1985-08-15	efua@example.com	Kumasi, Ghana	6.6885	-1.6244	GHA234567	TIN23456	Kojo Mensah	0245678901	5678
+0209988776	Yaw Osei	1990-02-20	yaw@example.com	Takoradi, Ghana	4.8995	-1.775	GHA345678	TIN34567	Abena Osei	0273456789	9101
+0551122334	Akosua Darko	1992-11-30	akosua@example.com	Tamale, Ghana	9.4071	-0.8539	GHA456789	TIN45678	Kofi Darko	0261122334	1121
+0506677889	Kojo Asante	1980-06-25	kojo@example.com	Cape Coast, Ghana	5.1053	-1.2466	GHA567890	TIN56789	Yaa Asante	0206677889	3141
+05212345678	Lucas Schneider	1990-05-14	lucas.schneider@example.com	Karl-Marx-Allee 123, 10243 Berlin, Germany	52.520008	13.404954	\N	12345678901	Anna Schneider	+4915123456789	8246
+0244474327	Frank Sarfo	2007-06-06	francbenz92@gmail.com	Ostendstrasse 27	5.6037	-0.187	\N	12344	Odee	015216871042	1234
++233501234567	Ama Serwaa Mensah	1992-08-15	ama.mensah@example.com	No. 12, Osu Avenue, Accra, Ghana	5.56	-0.205	\N	P0001234567X	Kwame Mensah	+233541112233	8273
+0248652530	Linda Kyerewaa	2022-02-08	sarfof06@gmai55l.com	Berlin	5.6037	-0.187	\N	12344	Odee	01635869472	1234
+\.
+
+
+--
+-- Data for Name: risk_users; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.risk_users (id, namedest, fraud_probability) FROM stdin;
+\.
+
+
+--
+-- Data for Name: transactiontbl; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.transactiontbl (id, trxdate, step, type, amount, "nameOrig", "oldbalanceOrg", "newbalanceOrig", "nameDest", "oldbalanceDest", "newbalanceDest", mobilenetwork, beneficiaryname, transactionstatus, is_fraud, fraud_probability, prediction_label, prediction_description, prediction_date, latitude, longitude) FROM stdin;
+1	2025-07-01 09:15:00	1	PAYMENT	120.00	0551234561	900.00	780.00	0249876511	300.00	420.00	MTN	John Doe	SUCCESSFUL	0	0.02	Not Fraud	Legitimate transaction	2025-07-01	5.6	-0.2
+2	2025-07-02 10:00:00	2	TRANSFER	250.00	0551234562	1000.00	750.00	0249876512	500.00	750.00	VODAFONE	Jane Smith	SUCCESSFUL	0	0.01	Not Fraud	Regular payment	2025-07-02	5.62	-0.21
+3	2025-07-03 11:45:00	3	CASH_OUT	300.00	0551234563	1100.00	800.00	0249876513	450.00	750.00	AIRTELTIGO	Mike Brown	PENDING	1	0.85	Fraud	High-risk cash out	2025-07-03	5.63	-0.22
+4	2025-07-04 08:20:00	4	DEBIT	180.00	0551234564	700.00	520.00	0249876514	600.00	780.00	MTN	Sarah Lee	SUCCESSFUL	0	0.05	Not Fraud	Normal debit	2025-07-04	5.65	-0.19
+5	2025-07-05 15:00:00	5	PAYMENT	200.00	0551234565	900.00	700.00	0249876515	800.00	1000.00	VODAFONE	Daniel Kim	SUCCESSFUL	0	0.03	Not Fraud	Payment transaction	2025-07-05	5.66	-0.18
+6	2025-07-06 16:30:00	6	TRANSFER	500.00	0551234566	1200.00	700.00	0249876516	900.00	1400.00	AIRTELTIGO	Emily White	PENDING	1	0.92	Fraud	Suspicious transfer	2025-07-06	5.67	-0.17
+7	2025-07-07 09:50:00	7	PAYMENT	220.00	0551234567	800.00	580.00	0249876517	400.00	620.00	MTN	Chris Green	SUCCESSFUL	0	0.04	Not Fraud	Regular payment	2025-07-07	5.68	-0.16
+8	2025-07-08 13:10:00	8	CASH_OUT	320.00	0551234568	950.00	630.00	0249876518	550.00	870.00	VODAFONE	Laura Blue	PENDING	1	0.78	Fraud	Potential fraud	2025-07-08	5.69	-0.15
+9	2025-07-09 14:45:00	9	TRANSFER	150.00	0551234569	650.00	500.00	0249876519	480.00	630.00	AIRTELTIGO	Oliver King	SUCCESSFUL	0	0.06	Not Fraud	Normal transfer	2025-07-09	5.7	-0.14
+10	2025-07-10 17:05:00	10	DEBIT	130.00	0551234570	400.00	270.00	0249876520	300.00	430.00	MTN	Sophia Hall	SUCCESSFUL	0	0.02	Not Fraud	Debit transaction	2025-07-10	5.71	-0.13
+11	2025-07-11 18:40:00	11	PAYMENT	260.00	0551234571	950.00	690.00	0249876521	760.00	1020.00	VODAFONE	Henry Adams	SUCCESSFUL	0	0.03	Not Fraud	Payment recorded	2025-07-11	5.72	-0.12
+12	2025-07-12 19:30:00	12	CASH_OUT	400.00	0551234572	1200.00	800.00	0249876522	900.00	1300.00	AIRTELTIGO	Diana Clark	PENDING	1	0.91	Fraud	High fraud risk	2025-07-12	5.73	-0.11
+13	2025-07-13 12:25:00	13	TRANSFER	340.00	0551234573	800.00	460.00	0249876523	500.00	840.00	MTN	Ethan Scott	SUCCESSFUL	0	0.07	Not Fraud	Moderate transaction	2025-07-13	5.74	-0.1
+14	2025-07-14 08:35:00	14	PAYMENT	210.00	0551234574	600.00	390.00	0249876524	450.00	660.00	VODAFONE	Grace Young	SUCCESSFUL	0	0.03	Not Fraud	Standard payment	2025-07-14	5.75	-0.09
+15	2025-07-15 09:55:00	15	DEBIT	180.00	0551234575	750.00	570.00	0249876525	600.00	780.00	AIRTELTIGO	Lucas Baker	SUCCESSFUL	0	0.04	Not Fraud	Debit routine	2025-07-15	5.76	-0.08
+16	2025-07-16 16:45:00	16	TRANSFER	450.00	0551234576	1400.00	950.00	0249876526	700.00	1150.00	MTN	Lily Parker	PENDING	1	0.89	Fraud	Suspicious transfer	2025-07-16	5.77	-0.07
+17	2025-07-01 07:00:00	1	PAYMENT	190.00	0551234577	880.00	690.00	0249876527	560.00	750.00	VODAFONE	Nathan Evans	SUCCESSFUL	0	0.02	Not Fraud	Routine payment	2025-07-01	5.78	-0.06
+18	2025-07-02 08:10:00	2	CASH_OUT	310.00	0551234578	920.00	610.00	0249876528	480.00	790.00	AIRTELTIGO	Mia Wright	PENDING	1	0.83	Fraud	Cash-out flagged	2025-07-02	5.79	-0.05
+19	2025-07-03 10:20:00	3	TRANSFER	270.00	0551234579	700.00	430.00	0249876529	500.00	770.00	MTN	Oscar Hill	SUCCESSFUL	0	0.05	Not Fraud	Acceptable transfer	2025-07-03	5.8	-0.04
+20	2025-07-04 11:35:00	4	DEBIT	160.00	0551234580	600.00	440.00	0249876530	520.00	680.00	VODAFONE	Isabella Cox	SUCCESSFUL	0	0.01	Not Fraud	Normal debit	2025-07-04	5.81	-0.03
+21	2025-07-17 10:15:00	17	PAYMENT	230.00	0551234581	800.00	570.00	0249876531	400.00	630.00	MTN	Samuel Foster	SUCCESSFUL	0	0.02	Not Fraud	Standard payment on MTN	2025-07-17	5.82	-0.02
+22	2025-07-18 12:25:00	18	TRANSFER	310.00	0551234582	1000.00	690.00	0249876532	500.00	810.00	MTN	Victoria Morris	PENDING	1	0.76	Fraud	Flagged MTN transfer	2025-07-18	5.83	-0.01
+23	2025-07-19 14:35:00	19	CASH_OUT	420.00	0551234583	1300.00	880.00	0249876533	750.00	1170.00	MTN	Leo Turner	PENDING	1	0.88	Fraud	High-risk cash out via MTN	2025-07-19	5.84	0
+24	2025-07-20 09:00:00	20	DEBIT	190.00	0551234584	750.00	560.00	0249876534	600.00	790.00	MTN	Chloe Hughes	SUCCESSFUL	0	0.03	Not Fraud	Regular debit via MTN	2025-07-20	5.85	0.01
+25	2025-07-21 11:10:00	21	PAYMENT	275.00	0551234585	900.00	625.00	0249876535	550.00	825.00	MTN	Benjamin Phillips	SUCCESSFUL	0	0.04	Not Fraud	Verified payment on MTN	2025-07-21	5.86	0.02
+26	2025-07-11 10:15:00	17	TRANSFER	450.00	0551234581	1400.00	950.00	0249876531	700.00	1150.00	MTN	Kwame Mensah	PENDING	1	0.87	Fraud	High-risk transfer flagged	2025-07-11	5.82	-0.02
+27	2025-07-12 11:45:00	18	CASH_OUT	380.00	0551234582	1200.00	820.00	0249876532	500.00	880.00	MTN	Akosua Darko	PENDING	1	0.91	Fraud	Suspicious cash out	2025-07-12	5.83	-0.01
+28	2025-07-13 13:30:00	19	PAYMENT	320.00	0551234583	950.00	630.00	0249876533	450.00	770.00	MTN	Yaw Owusu	PENDING	1	0.80	Fraud	Flagged payment attempt	2025-07-13	5.84	0
+29	2025-07-14 14:20:00	20	DEBIT	500.00	0551234584	1500.00	1000.00	0249876534	600.00	1100.00	MTN	Ama Boateng	PENDING	1	0.88	Fraud	Debit flagged for review	2025-07-14	5.85	0.01
+30	2025-07-15 15:10:00	21	TRANSFER	600.00	0551234585	1600.00	1000.00	0249876535	800.00	1400.00	MTN	Kojo Appiah	PENDING	1	0.93	Fraud	Very high fraud probability	2025-07-15	5.86	0.02
+\.
+
+
+--
+-- Name: compliance_tbl_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.compliance_tbl_id_seq', 1, false);
+
+
+--
+-- Name: feedback_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.feedback_id_seq', 1, false);
+
+
+--
+-- Name: prediction_analysis_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.prediction_analysis_id_seq', 3, true);
+
+
+--
+-- Name: risk_users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.risk_users_id_seq', 1, false);
+
+
+--
+-- Name: transactiontbl_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.transactiontbl_id_seq', 27, true);
+
+
+--
+-- Name: compliance_tbl compliance_tbl_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.compliance_tbl
+    ADD CONSTRAINT compliance_tbl_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: compliancetbl compliancetbl_email_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.compliancetbl
+    ADD CONSTRAINT compliancetbl_email_key UNIQUE (email);
+
+
+--
+-- Name: compliancetbl compliancetbl_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.compliancetbl
+    ADD CONSTRAINT compliancetbl_pkey PRIMARY KEY (user_id);
+
+
+--
+-- Name: feedback feedback_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.feedback
+    ADD CONSTRAINT feedback_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: prediction_analysis prediction_analysis_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.prediction_analysis
+    ADD CONSTRAINT prediction_analysis_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: regtbl regtbl_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.regtbl
+    ADD CONSTRAINT regtbl_pkey PRIMARY KEY (phone_number);
+
+
+--
+-- Name: risk_users risk_users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.risk_users
+    ADD CONSTRAINT risk_users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: transactiontbl transactiontbl_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.transactiontbl
+    ADD CONSTRAINT transactiontbl_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: ix_compliance_tbl_id; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX ix_compliance_tbl_id ON public.compliance_tbl USING btree (id);
+
+
+--
+-- Name: ix_compliance_tbl_transaction_id; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX ix_compliance_tbl_transaction_id ON public.compliance_tbl USING btree (transaction_id);
+
+
+--
+-- Name: ix_compliance_tbl_user_id; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX ix_compliance_tbl_user_id ON public.compliance_tbl USING btree (user_id);
+
+
+--
+-- Name: ix_prediction_analysis_id; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX ix_prediction_analysis_id ON public.prediction_analysis USING btree (id);
+
+
+--
+-- Name: ix_risk_users_id; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX ix_risk_users_id ON public.risk_users USING btree (id);
+
+
+--
+-- PostgreSQL database dump complete
+--
+
