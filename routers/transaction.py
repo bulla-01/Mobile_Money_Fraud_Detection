@@ -6,9 +6,11 @@ from sqlalchemy.orm import Session
 from database import get_db, SessionLocal, test_db_connection
 from models import Transaction1, RegTbl, ComplianceTbl
 from predict import predict_fraud, send_fraud_alert_email
-from datetime import datetime, timezone
+from datetime import datetime, timezone, date
 from dateutil import parser
 import logging
+from decimal import Decimal
+
 
 router = APIRouter()
 
@@ -128,26 +130,44 @@ def save_prediction_to_db(txn_dict: dict, prediction_response: dict, description
     db = SessionLocal()
     test_db_connection()
     try:
-        trx_datetime = parser.isoparse(txn_dict['trxdate']) if isinstance(txn_dict['trxdate'], str) else txn_dict['trxdate']
+        # Parse datetime safely
+        trx_datetime = (
+            parser.isoparse(txn_dict['trxdate'])
+            if isinstance(txn_dict['trxdate'], str)
+            else txn_dict['trxdate']
+        )
+
+        # Format fraud fields as strings to match DB schema
+        is_fraud = str(prediction_response.get("is_fraud", "0"))
+        fraud_probability = f"{prediction_response.get('risk_score', 0.0):.4f}"
+        prediction_label = prediction_response.get("label")
+
+        # Optional: Convert to Decimal if needed
+        amount = Decimal(str(txn_dict.get('amount', 0)))
+        oldbalanceorg = Decimal(str(txn_dict.get('oldbalanceOrg', 0)))
+        newbalanceorig = Decimal(str(txn_dict.get('newbalanceOrig', 0)))
+        oldbalancedest = Decimal(str(txn_dict.get('oldbalanceDest', 0)))
+        newbalancedest = Decimal(str(txn_dict.get('newbalanceDest', 0)))
 
         prediction_record = PredictionAnalysis(
             step=txn_dict['step'],
             type=txn_dict['type'],
-            amount=txn_dict['amount'],
+            amount=amount,
             nameorig=txn_dict['nameOrig'],
-            oldbalanceorg=txn_dict['oldbalanceOrg'],
-            newbalanceorig=txn_dict['newbalanceOrig'],
+            oldbalanceorg=oldbalanceorg,
+            newbalanceorig=newbalanceorig,
             namedest=txn_dict['nameDest'],
-            oldbalancedest=txn_dict['oldbalanceDest'],
-            newbalancedest=txn_dict['newbalanceDest'],
+            oldbalancedest=oldbalancedest,
+            newbalancedest=newbalancedest,
             trxdate=trx_datetime,
-            beneficiaryname=txn_dict['beneficiaryname'],
-            mobilenetwork=txn_dict['mobilenetwork'],
+            beneficiaryname=txn_dict.get('beneficiaryname'),
+            mobilenetwork=txn_dict.get('mobilenetwork'),
             prediction_response=prediction_response,
             prediction_description=description,
-            is_fraud=prediction_response.get("is_fraud"),
-            fraud_probability=prediction_response.get("risk_score"),
-            prediction_label=prediction_response.get("label")
+            is_fraud=is_fraud,
+            fraud_probability=fraud_probability,
+            prediction_label=prediction_label,
+            prediction_date=date.today()
         )
 
         db.add(prediction_record)
@@ -160,6 +180,7 @@ def save_prediction_to_db(txn_dict: dict, prediction_response: dict, description
         logging.error(f"❌ Error saving prediction data: {e}")
     finally:
         db.close()
+
         
 # ---------- Save Registration to DB ----------
 @router.post("/new_registration/submit", operation_id="submit_reg")

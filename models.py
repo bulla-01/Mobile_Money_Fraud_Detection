@@ -6,6 +6,7 @@ from datetime import datetime
 from pydantic import BaseModel
 from sqlalchemy import JSON
 from typing import List, Optional
+from decimal import Decimal
 
 
 Base = declarative_base()
